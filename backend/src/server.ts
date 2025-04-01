@@ -38,8 +38,8 @@ app.use(
     cookie:{
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      maxAge: 1000 * 60 * 60 * 12, // 1/2 a day
-      sameSite: "lax",
+      maxAge: 1000 * 60 * 60 * 12, // 12 hours
+      sameSite: "none",
     },
   })
 );
@@ -48,6 +48,7 @@ app.use(
 const server = new ApolloServer({
   typeDefs, 
   resolvers,
+  cache: "bounded",
   context: ({req, res}) => ({req, res}),
  });
 
