@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 // Load environment variables from .env
 dotenv.config();
 
-const sequelize = new Sequelize(
+/* const sequelize = new Sequelize(
   process.env.DB_NAME as string,
   process.env.DB_USER as string,
   process.env.DB_PASSWORD as string,
@@ -14,5 +14,6 @@ const sequelize = new Sequelize(
     logging: false, // Disable logging SQL queries
   }
 );
-
+ */
+const sequelize = new Sequelize(process.env.DATABASE_URL as string, {});
 export default sequelize;
