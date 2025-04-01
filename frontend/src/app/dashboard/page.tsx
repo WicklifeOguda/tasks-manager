@@ -79,7 +79,7 @@ export default function DashboardPage() {
             <div
               key={task.id}
               className="bg-gray-400 p-4 rounded shadow flex justify-between items-center cursor-pointer hover:bg-gray-50"
-              onClick={() => router.push(`/manage-tasks/${task.id}`)}
+              onClick={() => router.push("/manage-tasks")}
             >
               <div>
                 <h3 className="font-semibold text-gray-700">{task.title}</h3>
