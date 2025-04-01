@@ -162,4 +162,5 @@ mutation CreateTask($title: String!, $status: String!) {
 }
 ```
 
-## Deployment URLs
+## Deployment URL
+[https://tasks-manager-five.vercel.app]
