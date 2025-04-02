@@ -1,6 +1,6 @@
 import express, { Express } from "express";
 import session from "express-session";
-//import pgSession from "connect-pg-simple";
+import pgSession from "connect-pg-simple";
 import { ApolloServer } from "apollo-server-express";
 import { typeDefs } from "./graphql/schema";
 import { resolvers } from "./graphql/resolvers";
@@ -14,10 +14,13 @@ const app: Express = express();
 const PORT = process.env.PORT || 5000;
 
 // postgreSQL session store
-//const PgSession = pgSession(session);
+const PgSession = pgSession(session);
 
 // loading multiple origins and converting them into a list
 const allowedOrigins = process.env.CORS_ALLOWED_ORIGINS?.split(",") || [];
+
+// trust proxy (for proxied servers like Render)
+app.set("trust proxy", 1);
 
 // cores middleware
 app.use(cors({ 
@@ -28,10 +31,10 @@ app.use(cors({
 // session middleware
 app.use(
   session({
-    /* store: new PgSession({
+    store: new PgSession({
       conString: process.env.DATABASE_URL,
       createTableIfMissing: true,
-    }), */
+    }),
     secret: process.env.SESSION_SECRET as string,
     resave: false,
     saveUninitialized: false,
@@ -39,20 +42,11 @@ app.use(
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       maxAge: 1000 * 60 * 60 * 12, // 12 hours
-      sameSite: "none",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
     },
   })
 );
 
-app.get('/test-session', (req, res) => {
-  // Ensure session middleware has run
-  if (!req.session) {
-     return res.status(500).send('Session middleware not running correctly.');
-  }
-  req.session.testValue = 'Set at ' + new Date().toISOString();
-  console.log(`Session modified in /test-session. Session ID: ${req.sessionID}`);
-  res.status(200).send(`Tested session at ${req.session.testValue}. Check response headers.`);
-});
 
 // apollo server instance
 const server = new ApolloServer({
