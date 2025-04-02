@@ -1,6 +1,6 @@
 import express, { Express } from "express";
 import session from "express-session";
-import pgSession from "connect-pg-simple";
+//import pgSession from "connect-pg-simple";
 import { ApolloServer } from "apollo-server-express";
 import { typeDefs } from "./graphql/schema";
 import { resolvers } from "./graphql/resolvers";
@@ -14,7 +14,7 @@ const app: Express = express();
 const PORT = process.env.PORT || 5000;
 
 // postgreSQL session store
-const PgSession = pgSession(session);
+//const PgSession = pgSession(session);
 
 // loading multiple origins and converting them into a list
 const allowedOrigins = process.env.CORS_ALLOWED_ORIGINS?.split(",") || [];
@@ -28,10 +28,10 @@ app.use(cors({
 // session middleware
 app.use(
   session({
-    store: new PgSession({
+    /* store: new PgSession({
       conString: process.env.DATABASE_URL,
       createTableIfMissing: true,
-    }),
+    }), */
     secret: process.env.SESSION_SECRET as string,
     resave: false,
     saveUninitialized: false,
