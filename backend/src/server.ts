@@ -44,6 +44,16 @@ app.use(
   })
 );
 
+app.get('/test-session', (req, res) => {
+  // Ensure session middleware has run
+  if (!req.session) {
+     return res.status(500).send('Session middleware not running correctly.');
+  }
+  req.session.testValue = 'Set at ' + new Date().toISOString();
+  console.log(`Session modified in /test-session. Session ID: ${req.sessionID}`);
+  res.status(200).send(`Tested session at ${req.session.testValue}. Check response headers.`);
+});
+
 // apollo server instance
 const server = new ApolloServer({
   typeDefs, 
