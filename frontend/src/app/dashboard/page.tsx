@@ -17,16 +17,15 @@ const STATUS_COLORS: Record<TaskStatus, string> = {
 
 export default function DashboardPage() {
   const { user, loading: authLoading } = useAuth();
-  const { data, loading, error } = useQuery<{ tasks: Task[] }>(GET_TASKS);
+  const { data, loading } = useQuery<{ tasks: Task[] }>(GET_TASKS);
   const [filter, setFilter] = useState<"all" | TaskStatus>("all");
   const router = useRouter();
   const [logoutUser] = useMutation(LOGOUT_USER);
   
   if (authLoading || loading) return <p className="text-center text-gray-600">Loading tasks...</p>;
-  if (error) return <p className="text-center text-red-500">Error: {error.message}</p>;
 
   // Redirect if not authenticated
-  if (!authLoading && !user) {
+  if (!user) {
       router.push("/login");
     }
   
